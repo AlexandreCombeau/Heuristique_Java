@@ -16,12 +16,16 @@ public class Heuristics {
 	 * @return the heuristic with respect to the goal state
 	 */
 	public static IHeuristic<TaquinState> nbOfUnmatchedTiles(TaquinState goal){
-		
 		return new IHeuristic<TaquinState>() {
 			@Override
 			public double apply(TaquinState state) {
-				//TODO
-				return 0;
+				int n = 0;
+				for (int i= 0; i<state.matrice.length; i++)
+					for(int j=0; j<state.matrice[0].length; j++)
+						if (state.matrice[i][j] != goal.matrice[i][j])
+							n++;
+						
+				return n;
 			}
 			@Override
 			public String toString() {
