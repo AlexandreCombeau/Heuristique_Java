@@ -1,26 +1,24 @@
 package problems.taquin;
 
-import java.util.Arrays;
 import java.util.Iterator;
-import java.util.Random;
-
 import iialib.stateSpace.model.ApplicableOpsIterator;
 import iialib.stateSpace.model.IState;
-import problems.toBucharest.City;
-import problems.toBucharest.OpRoad;
 
 public class TaquinState implements IState<TaquinOperator>{
-
-	// ---------------------- Attributes ----------------------
+	
+	/**On represente un etat par une matrice d'entiers
+	 * Les attributs iVide et jVide representent les indices de la case vide
+	 * On considere qu'on deplace une tuile et non la case vide
+	 */
+	
+	// ---------------------- Attributes STATIC ----------------------
 	public static int ORDER = 3;
-	public  int iVide;
-	public  int jVide;
 
-	// Attributes
-
-
+	
 	// ---------------------- Attributes ----------------------
 	public int[][] matrice;
+	private  int iVide;
+	private  int jVide;
 
 
 	// ---------------------- Constructors ----------------------
@@ -47,6 +45,7 @@ public class TaquinState implements IState<TaquinOperator>{
 	
 	public void initializeOperators() {
 		TaquinOperator.ALL_OPS.clear();
+		//On calcule les nouvelles coordonnees de la case vide pour chaque deplacement et on regarde si c'est faisable
 		int i = iVide+1;
 		int j = jVide;
 		if (i>=0 && i<ORDER)  TaquinOperator.ALL_OPS.add(TaquinOperator.UP) ;
@@ -76,6 +75,19 @@ public class TaquinState implements IState<TaquinOperator>{
 				
 		return true;
 	}
+	@Override
+	public String toString() {
+		String str = "\n";
+		for (int i=0; i< ORDER; i++) {
+			for (int j=0; j<ORDER; j++) {
+				str+=" "+matrice[i][j]+" ";
+			}
+			str+="\n";
+		}
+		return str;
+		
+	}
+	//Getters/Setters
 	public int getiVide() {
 		return iVide;
 	}
@@ -94,17 +106,7 @@ public class TaquinState implements IState<TaquinOperator>{
 	public void setjVide(int jVide) {
 		this.jVide = jVide;
 	}
-	public String toString() {
-		String str = "";
-		for (int i=0; i< ORDER; i++) {
-			for (int j=0; j<ORDER; j++) {
-				str+=" "+matrice[i][j]+" ";
-			}
-			str+="\n";
-		}
-		return str;
-		
-	}
+
 
 
 }

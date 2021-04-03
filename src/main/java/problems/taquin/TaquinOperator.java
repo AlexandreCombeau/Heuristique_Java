@@ -7,6 +7,12 @@ import java.util.List;
 import iialib.stateSpace.model.IOperatorWithCost;
 
 public enum TaquinOperator implements IOperatorWithCost<TaquinState>{
+	/**
+	 * UP : deplace la tuile sous la case vide vers le haut (et la case vide vers le bas)
+	 * DOWN : deplace la tuile sur la case vide vers le bas (et la case vide vers le haut)
+	 * LEFT : deplace la tuile a droite de la case vide vers la gauche (et la case vide vers la droite)
+	 * RIGHT : deplace la tuile a gauche de la case vide vers la droite (et la case vide vers la gauche)
+	 */
 	
 	UP,DOWN,LEFT,RIGHT;
 
@@ -30,7 +36,7 @@ public enum TaquinOperator implements IOperatorWithCost<TaquinState>{
 	public boolean isApplicable(TaquinState s) {
 		int i = s.getiVide();
 		int j = s.getjVide();
-		
+		//On calcule les nouvelles coordonnees de la case vide
 		switch (this) {
 		case UP: 
 			i = i+1;
@@ -45,6 +51,7 @@ public enum TaquinOperator implements IOperatorWithCost<TaquinState>{
 			j = j+1;
 			break;
 		}
+		//Si les nouvelles coordonnees ne sortent pas du cadre 
 		return (i>= 0 && i<TaquinState.ORDER && j >=0 && j<TaquinState.ORDER) ;
 	}
 
@@ -53,9 +60,12 @@ public enum TaquinOperator implements IOperatorWithCost<TaquinState>{
 		if (this.isApplicable(s)) {
 			int iVide = s.getiVide();
 			int jVide = s.getjVide();
+			
+			//On copie les anciennes coordonnees
 			int iAncienVide = iVide;
 			int jAncienVide = jVide;
 			
+			//On calcule les nouvelles coordonnees de la case vide
 			switch (this) {
 			case UP: 
 				iVide = iVide+1;
@@ -70,10 +80,14 @@ public enum TaquinOperator implements IOperatorWithCost<TaquinState>{
 				jVide = jVide+1;
 				break;
 			}
+			
+			//On copie les anciennes tuiles
 			int [][] matrice = new int[TaquinState.ORDER][TaquinState.ORDER];
 			for (int i= 0; i<matrice.length; i++)
 				for(int j=0; j<matrice[0].length; j++)
 					matrice[i][j] = s.matrice[i][j];
+			
+			//On met a jour avec le deplacement 
 			matrice[iAncienVide][jAncienVide] = matrice[iVide][jVide];
 			matrice[iVide][jVide] = 0;
 			

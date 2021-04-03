@@ -16,10 +16,16 @@ public class RunToBucharest{
 				
 
 		// -- Testing non informed search Algorithms --
-		IHeuristicSearchAlgorithm<City,OpRoad> aStar = new AStarSearchStats<>();
+		IHeuristicSearchAlgorithm<City,OpRoad> aStar = new IDAStar<>();
 
 		Solution<City,OpRoad> sol = aStar.solve(p,Heuristics.h);
-		System.out.println(sol);
+
+		
+		IHeuristicSearchAlgorithm<City,OpRoad> idaStar = new AStarSearchStats<>();
+		//Solution<City,OpRoad> sol2 = idaStar.solve(p,Heuristics.h);
+
+		
+		
 	   
 	/*	
 		ASearchAlgorithmStats<City,OpRoad> alg2 = new BoundedDepthFirstSearchCycleDetectStats<>(12);

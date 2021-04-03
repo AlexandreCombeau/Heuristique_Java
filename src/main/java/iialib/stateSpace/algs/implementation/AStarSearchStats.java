@@ -1,7 +1,6 @@
 package iialib.stateSpace.algs.implementation;
 
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -10,7 +9,6 @@ import java.util.Set;
 import iialib.stateSpace.algs.*;
 import iialib.stateSpace.model.Problem;
 import iialib.stateSpace.model.IHeuristic;
-import iialib.stateSpace.model.IOperator;
 import iialib.stateSpace.model.IOperatorWithCost;
 import iialib.stateSpace.model.IState;
 
@@ -33,7 +31,7 @@ public class AStarSearchStats<S extends IState<O>, O extends IOperatorWithCost<S
 		this.problem = p;
 		System.out.println("-----------------------------------------------------");
 		System.out.println("Solving problem: " + p);
-		System.out.println("with algorithm: " + this.DESCRIPTION + " and heurisitic " + h);
+		System.out.println("with algorithm: " + DESCRIPTION + " and heurisitic " + h);
 		System.out.println("-----------------------------------------------------");
 		resetStatistics();
 
@@ -60,65 +58,61 @@ public class AStarSearchStats<S extends IState<O>, O extends IOperatorWithCost<S
     		
     		//choix node minimal
     		for(SSNode<S,O> ssn : frontier) {
-    			System.out.print (ssn.getF()+ "   ");
     			if(ssn.getF() < node.getF()) 
     				node = ssn;
     		}
-    		System.out.println ("\n Le choisi : " +node.getF());
-
     		S state = node.getState();
     		
-    		 // Test for terminations
-    		 if (problem.isTerminal(state)) {
-    			 result = buildSolution(node);
-    			 break;
-    		 } // Node expansion
-    		 else {
+			// Test for terminations
+			if (problem.isTerminal(state)) {
+				 result = buildSolution(node);
+				 break;
+			} // Node expansion
+    		else {
     	    	 frontier.remove(node);
     	    	 developedNodes.add(node);
     	    	 
     			 Iterator<O> it = state.applicableOperators();
     			 while (it.hasNext()) {
-    			   O operator = it.next();
-    			   S successor = operator.successor(state);
+    				 O operator = it.next();
+    				 S successor = operator.successor(state);
     			   	
-    			   if (! containsNodeWithSameState(developedNodes,successor) && ! containsNodeWithSameState(frontier,successor)) { //ajouter condition 
+    				 if (! containsNodeWithSameState(developedNodes,successor) && ! containsNodeWithSameState(frontier,successor)) { //ajouter condition 
     				   
-    				   double g = node.getG() + operator.getCost();
-    				   double f = g + h.apply(successor);
-    				   frontier.addLast(new SSNode<S,O>(successor,operator,node,g,f));
-    			   }
-    			   else { 
+    					 double g = node.getG() + operator.getCost();
+    					 double f = g + h.apply(successor);
+    					 frontier.addLast(new SSNode<S,O>(successor,operator,node,g,f));
+    				 }else { 
     				   
-    				   boolean found = false;
-    				   SSNode<S,O> nodeToUpdate = null;
-    				   for(SSNode<S,O> n : developedNodes) {
-    					   if(n.getState().equals(successor) && (n.getG() > node.getG() + operator.getCost())) {
-    						   nodeToUpdate = n;
-    						   found = true;
-    						   break;
-    					   }
-    				   }
-    				   if (! found) {
-	    				   for(SSNode<S,O> n : frontier) {
-	    					   if(n.getState().equals(successor) && (n.getG() > node.getG() + operator.getCost())) {
-	    						   nodeToUpdate = n;
-	    						   found = true;
-	    						   break;
-	    					   }
-	    				   }
-    				   }
-    				   if (found) {
-						   double g = node.getG() + operator.getCost();
-	    				   double f = g + h.apply(successor);
-	    				   nodeToUpdate.setG(g);
-	    				   nodeToUpdate.setF(f);
-	    				   nodeToUpdate.setAncestor(node);
-	    				   nodeToUpdate.setOperator(operator);
-    				   }
-    			   }
-    			 }
-      		 }
+    					 boolean found = false;
+    					 SSNode<S,O> nodeToUpdate = null;
+    					 for(SSNode<S,O> n : developedNodes) {
+    						 if(n.getState().equals(successor) && (n.getG() > node.getG() + operator.getCost())) {
+    							 nodeToUpdate = n;
+    							 found = true;
+    							 break;
+    						 }
+    					 }
+    					 if (! found) {
+    						 for(SSNode<S,O> n : frontier) {
+    							 if(n.getState().equals(successor) && (n.getG() > node.getG() + operator.getCost())) {
+    								 nodeToUpdate = n;
+    								 found = true;
+    								 break;
+    							 }
+    						 }
+    					 }
+    					 if (found) {
+    						 double g = node.getG() + operator.getCost();
+    						 double f = g + h.apply(successor);
+    						 nodeToUpdate.setG(g);
+    						 nodeToUpdate.setF(f);
+    						 nodeToUpdate.setAncestor(node);
+    						 nodeToUpdate.setOperator(operator);
+    					 }
+    				 }
+    			}
+      		}
      	}
         return result;
     }
@@ -132,14 +126,12 @@ public class AStarSearchStats<S extends IState<O>, O extends IOperatorWithCost<S
     
  
     
-	private static <S extends IState<O>, O extends IOperatorWithCost<S>> SolutionWithCost<S,O> buildSolution(SSNode<S,O> node) { //TODO attention heuristique
-		System.out.println(node.getState() + " F = " + node.getF()+ " G = " + node.getG());
+	private static <S extends IState<O>, O extends IOperatorWithCost<S>> SolutionWithCost<S,O> buildSolution(SSNode<S,O> node) { 
 		S s = node.getState();
 		O op = node.getOperator();
 		SSNode<S,O> ancestor = node.getAncestor();
 		SolutionWithCost<S,O> sol = new SolutionWithCost<S,O>(s);
 		while (ancestor != null) {
-			System.out.println(ancestor.getState()+" F = " + ancestor.getF()+ " G = " + ancestor.getG());
 			sol = new SolutionWithCost<S,O>(ancestor.getState(),op,sol);
 			op = ancestor.getOperator();
 			ancestor = ancestor.getAncestor();

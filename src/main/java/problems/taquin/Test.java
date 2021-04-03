@@ -2,13 +2,11 @@ package problems.taquin;
 
 import iialib.stateSpace.algs.IHeuristicSearchAlgorithm;
 import iialib.stateSpace.algs.Solution;
-import iialib.stateSpace.algs.implementation.IDAStarSearch;
+import iialib.stateSpace.algs.implementation.AStarSearchStats;
+import iialib.stateSpace.algs.implementation.IDAStar;
 import iialib.stateSpace.model.Problem;
-import problems.taquin.Heuristics;
 
 public class Test {
-	
-	
 	
 	
 	public static void main(String[] args) {
@@ -26,14 +24,15 @@ public class Test {
 		TaquinState finalState = new TaquinState(finalm) ;
 
 		Problem<TaquinState> p = Problem.defineProblem(initialState, finalState);
-		IHeuristicSearchAlgorithm<TaquinState,TaquinOperator> aStar = new IDAStarSearch<>();
+		IHeuristicSearchAlgorithm<TaquinState,TaquinOperator> aStar = new IDAStar<>();
+		IHeuristicSearchAlgorithm<TaquinState,TaquinOperator> idaStar = new AStarSearchStats<>();
+
 
 		Solution<TaquinState,TaquinOperator> sol = aStar.solve(p, Heuristics.nbOfUnmatchedTiles(finalState));
-		System.out.println(sol);
-		//Beware when testing to start from which it is possible
-		//to reach the desired goal state
+		
+		//Solution<TaquinState,TaquinOperator> sol2 = idaStar.solve(p, Heuristics.nbOfUnmatchedTiles(finalState));
 
-		// The state space is made of two disjoint connected components
+
 
 	}
 		
