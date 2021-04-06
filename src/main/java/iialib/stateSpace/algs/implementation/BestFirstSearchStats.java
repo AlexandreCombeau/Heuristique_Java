@@ -94,12 +94,14 @@ public class BestFirstSearchStats<S extends IState<O>, O extends IOperatorWithCo
 								break;
 							}
 						}
-						double g = node.getG() + operator.getCost();
-						double f = h.apply(successor);
-						nodeToUpdate.setG(g);
-						nodeToUpdate.setF(f);
-						nodeToUpdate.setAncestor(node);
-						nodeToUpdate.setOperator(operator);
+						if (nodeToUpdate != null) {
+							double g = node.getG() + operator.getCost();
+							double f = h.apply(successor);
+							nodeToUpdate.setG(g);
+							nodeToUpdate.setF(f);
+							nodeToUpdate.setAncestor(node);
+							nodeToUpdate.setOperator(operator);
+						}
 					}
 				}
 			}
