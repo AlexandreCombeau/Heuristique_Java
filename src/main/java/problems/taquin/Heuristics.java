@@ -41,7 +41,22 @@ public class Heuristics {
 		return new IHeuristic<TaquinState>() {
 			@Override
 			public double apply(TaquinState state) {
-				//TODO
+				int rep = 0;
+				for (int i= 0; i<state.matrice.length; i++)
+					for(int j=0; j<state.matrice[0].length; j++) {
+						rep+=dist(state.matrice[i][j],i,j);
+					}
+						
+				return rep;
+			}
+			public int dist(int tuile,int i_tuile,int j_tuile) {
+				//On cherche la tuile dans la matricge goal
+				for (int i= 0; i<goal.matrice.length; i++)
+					for(int j=0; j<goal.matrice[0].length; j++) {
+						if(goal.matrice[i][j]==tuile) {
+							return Math.abs(i_tuile-i)+Math.abs(j_tuile-j);
+						}
+					}
 				return 0;
 			}
 			@Override
