@@ -35,7 +35,7 @@ public class AStarSearchStats<S extends IState<O>, O extends IOperatorWithCost<S
 		System.out.println("-----------------------------------------------------");
 		resetStatistics();
 
-		SolutionWithCost<S, O> sol =  search(problem.getInitialState(), h);  // TODO
+		SolutionWithCost<S, O> sol =  search(problem.getInitialState(), h); 
 		System.out.println("-----------------------------------------------------");
 		System.out.println((sol != null) ?
 				"Solution : " + sol + "\nCost : " + sol.cost()
